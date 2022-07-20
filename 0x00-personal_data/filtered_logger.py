@@ -9,7 +9,7 @@ import re
 
 
 def filter_datum(fields: List[str], redaction: str,
-                message: str, separator: str) -> str:
+                 message: str, separator: str) -> str:
     """returns a function that log obfuscated"""
     for field in fields:
         val = field + '=[^{}]*'.format(separator)
