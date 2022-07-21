@@ -3,9 +3,13 @@
 Main file to write a function that log obfuscated
 """
 
+from cmath import log
 import logging
 from typing import Union, List
 import re
+
+
+PII_FIELDS = (['email', 'phone', 'ssn', 'password', 'ip'])
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -16,6 +20,22 @@ def filter_datum(fields: List[str], redaction: str,
         message = re.sub(val, field + '=' + redaction, message)
 
     return (message)
+
+
+def get_logger() -> logging.Logger:
+    """function that takes no arguments
+    and returns a logging.Logger object."""
+    log = logging.getLogger('user_data')
+    log.setLevel(level=logging.INFO)
+
+    RedactingFormatter = logging.Formatter(PII_FIELDS)
+
+    ch = logging.StreamHandler()
+    ch.setLevel(level=logging.DEBUG)
+    ch.setFormatter(RedactingFormatter)
+
+    log.addHandler(ch)
+    return log
 
 
 class RedactingFormatter(logging.Formatter):
