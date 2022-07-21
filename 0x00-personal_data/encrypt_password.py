@@ -8,12 +8,12 @@ from typing import Any
 import bcrypt
 
 
-def hash_password(password: str) -> Any:
+def hash_password(password: str) -> bytes:
     """function that returns a salted,
     hashed password, which is a byte string"""
 
-    passwd = bytes(password, 'utf-8')
+    passwd = password.encode()
 
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(passwd, salt)
-    return (hashed)
+    return hashed
