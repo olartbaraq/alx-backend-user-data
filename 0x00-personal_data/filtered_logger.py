@@ -9,7 +9,7 @@ from typing import Union, List
 import re
 
 
-PII_FIELDS = (['email', 'phone', 'ssn', 'password', 'name'])
+PII_FIELDS = (['name', 'email', 'phone', 'ssn', 'password'])
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -25,6 +25,7 @@ def filter_datum(fields: List[str], redaction: str,
 def get_logger() -> logging.Logger:
     """function that takes no arguments
     and returns a logging.Logger object."""
+    logging.Logger(name='user_data')
     log = logging.getLogger('user_data')
     log.setLevel(logging.INFO)
     log.propagate = False
