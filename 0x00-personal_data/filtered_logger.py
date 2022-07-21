@@ -26,13 +26,12 @@ def get_logger() -> logging.Logger:
     """function that takes no arguments
     and returns a logging.Logger object."""
     log = logging.getLogger('user_data')
-    log.setLevel(level=logging.INFO)
+    log.setLevel(logging.INFO)
     log.propagate = False
 
     formatter = RedactingFormatter(PII_FIELDS)
 
     ch = logging.StreamHandler()
-    # ch.setLevel(level=logging.DEBUG)
     ch.setFormatter(formatter)
 
     log.addHandler(ch)
