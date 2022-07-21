@@ -3,8 +3,10 @@
 Main file to write a function that log obfuscated
 """
 
+from asyncio.log import logger
 from typing import List
 import logging
+from unittest import result
 import mysql.connector
 import os
 import re
@@ -71,3 +73,20 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.getMessage(), self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
+
+
+def main():
+    """function to obtain a database connection using get_db function"""
+    mysql_retrieve_rows_query = """SELECT * FROM users;"""
+    db_connection = get_db
+    cursor = db_connection.cursor()
+    result = cursor.execute(mysql_retrieve_rows_query)
+    for row in result:
+        logger = get_logger
+        print(row)
+    result.close()
+    db_connection.close()
+
+
+if __name__ == '__main__':
+    main()
