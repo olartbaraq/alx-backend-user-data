@@ -3,13 +3,19 @@
 Main file to write a function that log obfuscated
 """
 
-from cmath import log
+from typing import List
 import logging
-from typing import Union, List
+import mysql.connector
+import os
 import re
 
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+
+os.environ['PERSONAL_DATA_DB_USERNAME'] = 'root'
+os.environ['PERSONAL_DATA_DB_PASSWORD'] = ''
+os.environ['PERSONAL_DATA_DB_HOST'] = 'localhost'
+os.environ['PERSONAL_DATA_DB_NAME'] = 'holberton'
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -37,6 +43,18 @@ def get_logger() -> logging.Logger:
 
     log.addHandler(ch)
     return log
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """returns a connector to the database"""
+    connection = mysql.connector.connect(
+        host=os.getenv('PERSONAL_DATA_DB_HOST'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME'),
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD')
+    )
+    if connection.is_connected():
+        return connection
 
 
 class RedactingFormatter(logging.Formatter):
