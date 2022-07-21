@@ -53,8 +53,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
         password=os.getenv('PERSONAL_DATA_DB_PASSWORD')
     )
-    if connection.is_connected():
-        return connection
+    return connection
 
 
 class RedactingFormatter(logging.Formatter):
