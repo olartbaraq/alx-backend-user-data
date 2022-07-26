@@ -3,7 +3,9 @@
 """text file class basicAuth that
 inherits from base class"""
 
-from typing import Tuple
+from typing import Tuple, TypeVar
+
+from flask_login import current_user
 from api.v1.auth.auth import Auth
 import base64
 
@@ -54,3 +56,25 @@ class BasicAuth(Auth):
             return (None, None)
         else:
             return (splited_name, splited_password)
+
+    def user_object_from_credentials(self,
+                                     user_email: str,
+                                     user_pwd: str
+                                     ) -> TypeVar('User'):
+        """ returns the User instance
+        based on his email and password"""
+
+        from models.user import User
+        if type(user_email) is not str or user_email is None:
+            return None
+        if type(user_pwd) is not str or user_pwd is None:
+            return None
+        user = User()
+        current_user = user.search({'email': user_email})
+        if not current_user:
+            return None
+        valid_password = (current_user[0]).is_valid_password(user_pwd)
+        if valid_password:
+            return current_user[0]
+        else:
+            return None
