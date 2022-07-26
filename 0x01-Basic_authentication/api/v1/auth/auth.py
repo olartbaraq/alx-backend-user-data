@@ -6,6 +6,7 @@ from email import header
 from wsgiref import headers
 from flask import request
 from typing import List, TypeVar
+import re
 
 
 class Auth():
@@ -16,6 +17,13 @@ class Auth():
         """returns a bool based on path and excluded_paths"""
         if not excluded_paths or not path:
             return True
+        for ex_path in excluded_paths:
+            if ex_path[-1] == '*':
+                pat = ex_path.split('*')
+                pat = pat[0] + '.*'
+                match = re.search(pat, path)
+                if match:
+                    return False
         if path[-1] != '/':
             path = path + '/'
         if path in excluded_paths:
