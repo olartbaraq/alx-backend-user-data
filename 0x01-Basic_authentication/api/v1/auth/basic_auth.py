@@ -4,8 +4,6 @@
 inherits from base class"""
 
 from typing import Tuple, TypeVar
-
-from flask_login import current_user
 from api.v1.auth.auth import Auth
 import base64
 
@@ -65,6 +63,7 @@ class BasicAuth(Auth):
         based on his email and password"""
 
         from models.user import User
+
         if type(user_email) is not str or user_email is None:
             return None
         if type(user_pwd) is not str or user_pwd is None:
