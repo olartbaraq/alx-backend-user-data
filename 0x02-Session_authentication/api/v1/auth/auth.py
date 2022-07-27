@@ -7,6 +7,9 @@ from wsgiref import headers
 from flask import request
 from typing import List, TypeVar
 import re
+import os
+
+_my_session_id = os.getenv('SESSION_NAME')
 
 
 class Auth():
@@ -43,3 +46,10 @@ class Auth():
     def current_user(self, request=None) -> TypeVar('User'):
         """returns the request status object"""
         return None
+
+    def session_cookie(self, request=None):
+        """ returns a cookie value from a request"""
+        if request is None:
+            return None
+        cookie_value = request.cookies.get(_my_session_id)
+        return cookie_value
