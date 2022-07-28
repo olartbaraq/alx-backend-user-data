@@ -3,6 +3,7 @@
 """creating a new authentication mechanism"""
 
 from api.v1.auth.auth import Auth
+from api.v1.views.users import User
 import uuid
 
 
@@ -34,3 +35,10 @@ class SessionAuth(Auth):
         if session_id is not None:
             userID = self.user_id_by_session_id.get(session_id)
             return userID
+
+    def current_user(self, request=None):
+        """ that returns a User instance based on a cookie value"""
+        session_cookie_val = self.session_cookie(request)
+        user_session_id = self.user_id_for_session_id(session_cookie_val)
+        user_instance = User.get(user_session_id)
+        return user_instance
