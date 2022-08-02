@@ -3,6 +3,10 @@
 """basic flask app"""
 
 from flask import Flask, jsonify, request
+from auth import Auth
+
+
+AUTH = Auth()
 
 app = Flask(__name__)
 
@@ -11,12 +15,6 @@ app = Flask(__name__)
 def payload():
     """returns a json payload of the form"""
     return jsonify({"message": "Bienvenue"})
-
-
-from auth import Auth
-
-
-AUTH = Auth()
 
 
 @app.route('/users', methods=['POST'])
