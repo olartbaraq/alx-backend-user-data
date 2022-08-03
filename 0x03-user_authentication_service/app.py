@@ -2,7 +2,7 @@
 
 """basic flask app"""
 
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, Response, jsonify, request, make_response
 from flask import abort, redirect, url_for
 from auth import Auth
 
@@ -54,7 +54,7 @@ def logout() -> str:
         user = AUTH.get_user_from_session_id(session_id=session_id)
         return redirect(url_for('payload'))
     except Exception:
-        abort(403)
+        return Response(status=403)
 
 
 if __name__ == "__main__":
