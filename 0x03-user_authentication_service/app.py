@@ -2,6 +2,7 @@
 
 """basic flask app"""
 
+import email
 from flask import Flask, jsonify, request
 from flask import abort, redirect, url_for
 from auth import Auth
@@ -54,6 +55,18 @@ def logout() -> str:
         user = AUTH.get_user_from_session_id(session_id=session_id)
         AUTH.destroy_session(user_id=user.id)
         return redirect(url_for('payload'))
+    except Exception:
+        abort(403)
+
+
+@app.route('/profile', methods=['GET'])
+def profile() -> str:
+    """ If the user exist, respond with a 200 HTTP status
+    and the following JSON payload"""
+    session_id = request.cookies.get('session_id')
+    try:
+        user = AUTH.get_user_from_session_id(session_id=session_id)
+        return jsonify({"email": f'{user.email}'}), 200
     except Exception:
         abort(403)
 
