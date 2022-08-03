@@ -2,7 +2,7 @@
 
 """basic flask app"""
 
-import email
+from auth import _generate_uuid
 from flask import Flask, jsonify, request
 from flask import abort, redirect, url_for
 from auth import Auth
@@ -67,6 +67,19 @@ def profile() -> str:
     try:
         user = AUTH.get_user_from_session_id(session_id=session_id)
         return jsonify({"email": f'{user.email}'}), 200
+    except Exception:
+        abort(403)
+
+
+@app.route('/reset_password', methods=['POST'])
+def get_reset_password_token() -> str:
+    """ generate a token and respond with a 200 HTTP status"""
+    email = request.form.get('email')
+    try:
+        user = AUTH.get_reset_password_token(email=email)
+        new_token = _generate_uuid()
+        payload = {"email": f'{email}', "reset_token": f'{new_token}'}
+        return jsonify(payload), 200
     except Exception:
         abort(403)
 
