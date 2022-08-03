@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """imports method to return hashed password"""
 
+from typing import Union
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -62,5 +63,15 @@ class Auth:
             new_uuid = _generate_uuid()
             self._db.update_user(user.id, session_id=new_uuid)
             return new_uuid
+        except NoResultFound:
+            return None
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """returns the corresponding User or None"""
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
         except NoResultFound:
             return None
