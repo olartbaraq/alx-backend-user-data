@@ -2,7 +2,8 @@
 
 """basic flask app"""
 
-from flask import Flask, jsonify, request, make_response, abort
+from flask import Flask, jsonify, request, make_response
+from flask import abort, redirect, url_for
 from auth import Auth
 
 
@@ -41,6 +42,19 @@ def login() -> str:
     resp = jsonify({"email": f'{email}', "message": "logged in"})
     resp.set_cookie('session_id', session_id)
     return resp
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout() -> str:
+    """ If the user exists destroy the session and
+    redirect the user to GET /. If the user does not exist,
+    respond with a 403 HTTP status."""
+    session_id = request.cookies.get('session_id')
+    try:
+        user = AUTH.get_user_from_session_id(session_id=session_id)
+        return redirect(url_for('payload'))
+    except Exception:
+        abort(403)
 
 
 if __name__ == "__main__":
